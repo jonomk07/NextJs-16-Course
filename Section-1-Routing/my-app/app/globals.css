@@ -1,0 +1,26 @@
+/* =============================================================================
+   GLOBAL CSS STYLES
+   =============================================================================
+   This file (app/globals.css) contains styles that apply to your ENTIRE app.
+   It is imported in the root layout.tsx file.
+
+   Key concepts:
+     - Global styles are applied once and affect all pages
+     - This is the place for CSS resets, base styles, and CSS variables
+     - Tailwind CSS is imported here to enable utility classes throughout the app
+
+   File location matters:
+     - app/globals.css is typically imported in app/layout.tsx
+     - The styles cascade down to all child components and pages
+     - For component-specific styles, use CSS Modules (*.module.css)
+
+   Tailwind CSS:
+     - @import "tailwindcss" brings in all Tailwind utility classes
+     - You can then use classes like "text-5xl", "font-bold", "bg-blue-500"
+     - Tailwind v4 uses the @import syntax instead of @tailwind directives
+   ============================================================================= */
+
+/* Import Tailwind CSS framework */
+/* This single import gives you access to all Tailwind utility classes */
+/* Examples: flex, grid, p-4, m-2, text-lg, bg-red-500, hover:bg-blue-600, etc. */
+@import "tailwindcss";
