@@ -280,6 +280,180 @@ src/app/
 
 ---
 
+### Section 4: E-Commerce Project - Store Brand
+
+Build a modern, responsive e-commerce website from scratch, applying all concepts from previous sections.
+
+**Location:** `Section-4-Project/ecommerce-app`
+
+#### Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| Next.js 16 | Framework (App Router + Turbopack) |
+| React 19 | UI library |
+| TypeScript 5 | Type safety |
+| Tailwind CSS 4 | Styling |
+| Boxicons | Icon library |
+| Prompt (Google Font) | Custom typography |
+
+#### Project Setup
+
+- Clean Next.js 16 app with `src/` directory structure
+- Removed default starter files for a clean slate
+- Boxicons registered globally via layout
+- Prompt font replaces default Geist font
+- Custom metadata for SEO
+- Product data with 24 items across 8 categories
+
+#### Navigation Bar
+
+Fixed-position responsive navigation with:
+- **Logo**: Yellow circle with "SB" initials + "Store" (white) + "Brand" (yellow)
+- **Search Bar**: Rounded input with focus ring animation (hidden on mobile)
+- **Products Button**: Store icon with chevron dropdown indicator
+- **Cart & Login Icons**: Icon-only buttons with hover effects
+- **Color Scheme**: Dark blue `#003D5B` background, yellow `#EDAE49` accents
+
+#### Footer
+
+Full-width responsive footer with three sections:
+
+**Newsletter Section** (dark blue background):
+- Email subscription form with styled input and subscribe button
+- Responsive layout (stacks on mobile, side-by-side on desktop)
+
+**Main Content** (12-column grid):
+| Column | Content |
+|--------|---------|
+| Logo & Social (4 cols) | Brand logo, description, social media icons (Facebook, Twitter, Instagram, YouTube) |
+| Categories (2 cols) | Dynamic from product data using `categories.slice(0, 5)` + "View All" link |
+| Shop (2 cols) | All Products, New Arrivals, Best Sellers, Gift Cards, Deals |
+| Support (2 cols) | Contact Us, FAQs, Shipping, Returns, Track Order |
+| Company (2 cols) | About Us, Blog, Careers, Press, Privacy Policy |
+
+**Bottom Bar**:
+- Dynamic copyright year using `new Date().getFullYear()`
+- Payment method icons (Visa, Mastercard, PayPal, Apple)
+- Legal links (Terms, Privacy, Cookies)
+
+#### Design System Colors
+
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Dark Blue | `#003D5B` | Navigation bg, headings, footer text |
+| Yellow/Gold | `#EDAE49` | Accents, buttons, logo, hover states |
+| Teal | `#00798C` | Links, hover effects, hero gradient |
+
+#### Hero Section
+
+Full-viewport hero with gradient background and featured product display:
+
+- **Background**: Horizontal gradient from dark blue to teal (`bg-linear-to-r`)
+- **Height**: 80% viewport height with `overflow-hidden`
+- **Left Side**: Bold headline ("Discover Premium Products"), subtitle paragraph, "Shop Now" CTA button with hover scale effect
+- **Right Side**: Featured product image in a frosted glass card (`backdrop-blur-md`) with:
+  - Animated pulsing glow circle behind the card (`animate-pulse`)
+  - 3-degree rotation that straightens on hover (`rotate-3 → rotate-0`)
+  - "New Arrival" badge positioned at the bottom-right corner
+- **Responsive**: Stacks vertically on mobile, side-by-side on desktop
+
+#### Products Page (Category Grid)
+
+Dynamic category cards displayed in a responsive grid layout:
+
+- **Responsive Grid**: 1 column (mobile) → 2 (md) → 3 (lg) → 4 (xl)
+- **Category Cards**: Each card dynamically rendered from `categories` data with:
+  - Product image fetched via `getCategoryImage()` helper (finds first product matching category slug)
+  - Fallback to `placeholder.png` if no product found
+  - `next/image` with `fill` and responsive `sizes` attribute
+  - Soft white gradient overlay connecting image to text area
+  - Category name, description, and "View Products" link
+  - Dynamic `borderColor` and text colors from `category.color`
+  - Hover effects: lift (`-translate-y-[5px]`), shadow increase, image scale
+- **Bottom Navigation**: "Back to Home" link with arrow icon
+
+#### Dynamic Category Pages
+
+Each category card links to `/products/[category]` using dynamic routing:
+
+- **Dynamic Route**: `[category]` folder with `page.tsx` — captures category slug from URL
+- **Async Server Component**: `params` is a Promise in Next.js 15+ — awaited before use
+- **Category Lookup**: Uses `categories.find()` to match slug and retrieve name/color/description
+- **Fallback**: If no category match, displays the raw URL slug as the name
+- **Banner Section**: Gradient banner with dynamic category name and description
+- **Products Grid**: Filters `productsList` by category slug, renders 1→2→3 column responsive grid
+- **ProductCard Component** (`components/product-card.tsx`):
+  - TypeScript `ProductCardProps` interface for type safety (`product`, `categorySlug`, `categoryColor`)
+  - Product image with hover scale effect
+  - Title (`line-clamp-1`) and description (`line-clamp-2`) for text truncation
+  - Price formatted with `toLocaleString()` for number formatting
+  - "View Details" button and "Add to Cart" icon button
+  - Dynamic `backgroundColor` and text colors from `categoryColor` prop
+- **Back Navigation**: "Back to all Categories" link
+- **Store Layout**: `pt-24` spacer div added between Navigation and main content for all store pages
+
+#### Product Details Page
+
+Individual product page at `/products/[category]/[productId]` using nested dynamic routing:
+
+- **Nested Dynamic Routes**: Two `[param]` folders create URL like `/products/smartphones/product001`
+- **View Details Link**: ProductCard now links dynamically via `` `/products/${categorySlug}/${product.id}` ``
+- **Responsive Layout**: `flex-col` on mobile, `flex-row` on desktop (image left, info right)
+- **Product Image**: `next/image` with `fill`, `priority` (preloads), and responsive `sizes`
+- **Product Info**: Title (`text-3xl`), price in standout color, description with `leading-relaxed`
+- **Quantity Counter**: `[-]` button + readOnly input + `[+]` button with `rounded-l-lg`/`rounded-r-lg`
+- **Action Buttons**: "Add to Cart" (primary, category color) + "Go to Cart" Link (secondary, gray)
+- **Client Component**: `"use client"` directive — required for `useState`/`useEffect` hooks
+- **Data Fetching with useEffect**:
+  - `useState<Product | null>(null)` for product state
+  - Async `fetchParams` function inside `useEffect` (callback can't be async directly)
+  - Awaits params Promise, finds product by ID with `Array.find()`
+  - Validates both product existence AND category match before updating state
+  - Dependency array `[params]` re-runs on route changes
+- **Page structure**: White card with `rounded-2xl`, `shadow-lg`, two-column layout (JSX uses static data for now, dynamic replacement coming next)
+
+#### Product Categories
+
+| Category | Products |
+|----------|----------|
+| Smartphones | 3 products |
+| Televisions | 3 products |
+| Headphones | 3 products |
+| Laptops | 3 products |
+| Smartwatches | 3 products |
+| Cameras | 3 products |
+| Tablets | 3 products |
+| Speakers | 3 products |
+
+#### Project Structure
+
+```
+src/app/
+├── layout.tsx           → Root layout (Prompt font, boxicons, metadata)
+├── globals.css          → Tailwind CSS 4 import
+├── page.tsx             → Home page (hero section with featured product)
+├── data/
+│   └── products.ts      → 24 products + 8 categories with types
+├── components/
+│   ├── navigation.tsx   → Reusable navigation component
+│   ├── footer.tsx       → Reusable footer component
+│   └── product-card.tsx → Reusable product card component
+└── (store)/             → Route group for store pages
+    ├── layout.tsx       → Wraps pages with Navigation + Footer + pt-24 spacer
+    └── products/
+        ├── page.tsx     → /products (dynamic category grid)
+        └── [category]/
+            ├── page.tsx → /products/:category (dynamic category page)
+            └── [productId]/
+                └── page.tsx → /products/:category/:productId (product details)
+
+public/
+└── images/              → 24 product images + placeholder
+```
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -310,6 +484,13 @@ npm install
 npm run dev
 ```
 
+**Section 4 - E-Commerce Project:**
+```bash
+cd Section-4-Project/ecommerce-app
+npm install
+npm run dev
+```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
@@ -320,7 +501,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 2. **Experiment with routes** - Create new pages, test dynamic segments
 3. **Move to Section 2** - Learn how layouts wrap and organize pages
 4. **Continue to Section 3** - Master navigation with Link component and active links
-5. **Combine concepts** - Build a multi-section app with proper navigation
+5. **Build with Section 4** - Apply everything in a real e-commerce project
 
 ---
 
